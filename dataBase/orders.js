@@ -9,7 +9,7 @@ const createOrderTableQuery = `
 `;
 
 module.exports = {
-    createOrderTable: async function () {
-        await accessToDB(createOrderTableQuery, 'Order table created');
-    },
-}
+  createOrderTable: async function () {
+    await accessToDB(createOrderTableQuery, 'Order table created');
+  }
+};

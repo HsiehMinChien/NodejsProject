@@ -11,9 +11,9 @@ const createTableQuery = `
     password VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   );
-`
+`;
 
 pool.query(createTableQuery)
   .then(() => console.log('Table created successfully!'))
   .catch(err => console.error('Error creating table:', err))
-  .finally(() => pool.end())
+  .finally(() => pool.end());

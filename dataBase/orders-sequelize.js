@@ -8,22 +8,13 @@ const sequelize = new Sequelize(dbConfig.database, dbConfig.user, dbConfig.passw
 });
 
 // 定義 User 模型
-sequelize.define('users', {
+sequelize.define('orders', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true
-  },
-  password: {
+  message: {
     type: DataTypes.STRING,
     allowNull: false
   },

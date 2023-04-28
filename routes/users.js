@@ -18,7 +18,7 @@ router.post('/', async (req, res, next) => {
   try {
     const { rows } = await db.query(
       'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *',
-      [name, email, password],
+      [name, email, password]
     );
     res.json(rows[0]);
   } catch (error) {
