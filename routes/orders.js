@@ -12,6 +12,7 @@ router.get('/', async function (req, res, next) {
   }
 });
 
+// Post order, patient and create relation.
 router.post('/', async (req, res, next) => {
   const { message, patientsName } = req.body;
   try {
@@ -32,6 +33,22 @@ router.post('/', async (req, res, next) => {
       orders: orders[0],
       patient: patientsName && patientResponse.rows ? patientResponse.rows[0] : undefined
     });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Update order
+router.patch('/:id', async (req, res, next) => {
+  const { id } = req.params;
+  const { message } = req.body;
+  try {
+    await db.query(
+      'UPDATE orders SET message = $1 WHERE id = $2',
+      [message, id]
+    );
+
+    res.json({ successfully: true });
   } catch (error) {
     next(error);
   }
