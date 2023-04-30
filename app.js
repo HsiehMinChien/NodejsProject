@@ -11,6 +11,11 @@ var patientRouter = require('./routes/patient');
 
 var app = express();
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*"); // 允許所有來源的請求
+  next();
+});
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');

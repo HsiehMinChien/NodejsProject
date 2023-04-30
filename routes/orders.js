@@ -12,6 +12,17 @@ router.get('/', async function (req, res, next) {
   }
 });
 
+router.get('/:id', async function (req, res, next) {
+  const { id } = req.params;
+  try {
+    const { rows } = await db.query('SELECT * FROM orders WHERE id = $1', [id]);
+    res.json(rows);
+  } catch (error) {
+    next(error);
+  }
+});
+
+
 // Post order, patient and create relation.
 router.post('/', async (req, res, next) => {
   const { message, patientsName } = req.body;
