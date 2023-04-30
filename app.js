@@ -12,7 +12,7 @@ var patientRouter = require('./routes/patient');
 var app = express();
 
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*"); // 允許所有來源的請求
+  res.header('Access-Control-Allow-Origin', '*'); // 允許所有來源的請求
   next();
 });
 
