@@ -49,6 +49,59 @@ router.post('/', async (req, res, next) => {
   }
 });
 
+router.put('/:id',async (req, res, next) => {
+  const { id: orderId } = req.params;
+  const { message, patientId } = req.body;
+  try {
+    const { rows: orders } = await db.query(
+      'SELECT * FROM orders WHERE id = $1',
+      [orderId]
+    );
+    const { rows: patients } = await db.query(
+      'SELECT * FROM patient WHERE id = $1',
+      [patientId]
+    );
+
+    // Confirm order and patient are both exist.
+    if (!orders || orders.length === 0 || !patients || patients.length === 0) {
+      return res.status(400).send('Invalid order id or patient id!!');
+    }
+
+    const { rows: patientsFromOrderId } = await db.query(
+      'SELECT * FROM patient WHERE orderid = $1',
+      [orderId]
+    );
+
+    // More than one patients relative to this order.
+    if (patientsFromOrderId && patientsFromOrderId.length > 1) {
+      const { rows: orders } = await db.query(
+        'INSERT INTO orders (message) VALUES ($1) RETURNING *',
+        [message]
+      );
+      await db.query(
+        'UPDATE patient SET orderid = $1 WHERE id = $2',
+        [orders[0].id, patientId]
+      );
+    } else {
+      await db.query(
+        'UPDATE orders SET message = $1 WHERE id = $2',
+        [message, orderId]
+      );
+      // No patient relative to this order.
+      if (!patientsFromOrderId || patientsFromOrderId.length === 0) {
+        await db.query(
+          'UPDATE patient SET orderid = $1 WHERE id = $2',
+          [orderId, patientId]
+        );
+      }
+    }
+
+    res.json({ successfully: true });
+  } catch (error) {
+    next(error);
+  }
+});
+
 // Update order
 router.patch('/:id', async (req, res, next) => {
   const { id } = req.params;
